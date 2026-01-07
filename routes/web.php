@@ -1,0 +1,58 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PersonalInfoController;
+use App\Http\Controllers\FamilyBackgroundController;
+use App\Http\Controllers\ChildController;
+use App\Http\Controllers\EducationalBackgroundController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+
+Route::get('/', function () {
+    return redirect('/personal-info/create');
+});
+
+Route::get('/personal-info', [PersonalInfoController::class, 'index'])
+    ->middleware('auth')
+    ->name('personal-info.index');
+
+Route::get('/personal-info/create', [PersonalInfoController::class, 'create']);
+Route::post('/personal-info/store', [PersonalInfoController::class, 'storeWeb']);
+Route::post('/personal-info', [PersonalInfoController::class, 'store'])->name('personal.store');
+
+
+
+
+Route::post('/family-background', [FamilyBackgroundController::class, 'store'])->name('family.store');
+Route::post('/children', [ChildController::class, 'store'])->name('children.store');
+Route::post('/educational-background', [EducationalBackgroundController::class, 'store'])->name('education.store');
+
+require __DIR__.'/auth.php';
+
+

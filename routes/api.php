@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PersonalInfoController;
+use App\Http\Controllers\FamilyBackgroundController;
+use App\Http\Controllers\ChildController;
+use App\Http\Controllers\EducationalBackgroundController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Applicant CRUD Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/test', function () {
+    return response()->json(['status' => 'API working']);
+});
+
+
+Route::post('/personal-info', [PersonalInfoController::class, 'store']);
+
+Route::post('/family-background', [FamilyBackgroundController::class, 'store']);
+
+Route::post('/children', [ChildController::class, 'store']);
+
+Route::post('/educational-background', [EducationalBackgroundController::class, 'store']);
