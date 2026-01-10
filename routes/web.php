@@ -41,8 +41,10 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/', function () {
-    return redirect('/personal-info/create');
+    return redirect('/login');
 });
+
+
 
 Route::get('/personal-info', [PersonalInfoController::class, 'index'])
     ->middleware('auth')
@@ -54,13 +56,13 @@ Route::post('/personal-info', [PersonalInfoController::class, 'store'])->name('p
 
 
 
+Route::get('/pds/{id}/export', [PersonalInfoController::class, 'exportPds'])
+    ->name('pds.export');
+
+Route::delete('/pds/{id}', [PersonalInfoController::class, 'destroy'])
+    ->name('personal-info.destroy');
 
 
-
-Route::get(
-    '/personal-info/{personalInfo}/export',
-    [PersonalInfoController::class, 'exportExcel']
-)->name('personal-info.export');
 
 
 

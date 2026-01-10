@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PersonalInfo;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PdsExport;
 
 class PersonalInfoController extends Controller
 {
@@ -93,107 +95,29 @@ public function index()
 
 
 
-public function exportExcel(PersonalInfo $personalInfo)
+public function exportPds($id)
 {
-    $personalInfo->load([
-        'familyBackground.children',
-        'educationalBackgrounds',
-        'eligibilities',
-        'workExperiences',
-        'voluntaryOrganizations',
-        'trainings',
-        'otherInformation',
-    ]);
-
-    $fileName = 'PDS_' . $personalInfo->surname . '.csv';
-
-    $response = new StreamedResponse(function () use ($personalInfo) {
-        $handle = fopen('php://output', 'w');
-
-        // ===== HEADER =====
-        fputcsv($handle, ['PERSONAL DATA SHEET (PDS)']);
-
-        fputcsv($handle, []);
-        fputcsv($handle, ['PERSONAL INFORMATION']);
-        fputcsv($handle, ['Surname', $personalInfo->surname]);
-        fputcsv($handle, ['First Name', $personalInfo->first_name]);
-        fputcsv($handle, ['Date of Birth', $personalInfo->date_of_birth]);
-        fputcsv($handle, ['Sex', $personalInfo->sex_at_birth]);
-        fputcsv($handle, ['Civil Status', $personalInfo->civil_status]);
-
-        // ===== FAMILY =====
-        fputcsv($handle, []);
-        fputcsv($handle, ['FAMILY BACKGROUND']);
-
-        if ($personalInfo->familyBackground) {
-            fputcsv($handle, ['Father',
-                $personalInfo->familyBackground->father_surname,
-                $personalInfo->familyBackground->father_first_name
-            ]);
-            fputcsv($handle, ['Mother',
-                $personalInfo->familyBackground->mother_maiden_surname,
-                $personalInfo->familyBackground->mother_first_name
-            ]);
-        }
-
-        // ===== CHILDREN =====
-        fputcsv($handle, []);
-        fputcsv($handle, ['CHILDREN']);
-
-        if ($personalInfo->familyBackground?->children->isEmpty()) {
-            fputcsv($handle, ['Not Applicable']);
-        } else {
-            foreach ($personalInfo->familyBackground->children as $child) {
-                fputcsv($handle, [
-                    $child->full_name,
-                    $child->date_of_birth
-                ]);
-            }
-        }
-
-        // ===== EDUCATION =====
-        fputcsv($handle, []);
-        fputcsv($handle, ['EDUCATIONAL BACKGROUND']);
-
-        foreach ($personalInfo->educationalBackgrounds as $edu) {
-            fputcsv($handle, [
-                $edu->level,
-                $edu->school_name,
-                $edu->year_graduated
-            ]);
-        }
-
-        // ===== WORK =====
-        fputcsv($handle, []);
-        fputcsv($handle, ['WORK EXPERIENCE']);
-
-        foreach ($personalInfo->workExperiences as $work) {
-            fputcsv($handle, [
-                $work->position_title,
-                $work->company_name
-            ]);
-        }
-
-        // ===== OTHER INFO =====
-        fputcsv($handle, []);
-        fputcsv($handle, ['OTHER INFORMATION']);
-
-        if ($personalInfo->otherInformation) {
-            fputcsv($handle, ['Special Skills', $personalInfo->otherInformation->special_skills]);
-            fputcsv($handle, ['Non-Academic Distinctions', $personalInfo->otherInformation->non_academic_distinctions]);
-            fputcsv($handle, ['Memberships', $personalInfo->otherInformation->membership_in_associations]);
-        }
-
-        fclose($handle);
-    });
-
-    $response->headers->set('Content-Type', 'text/csv');
-    $response->headers->set(
-        'Content-Disposition',
-        'attachment; filename="' . $fileName . '"'
+    return Excel::download(
+        new PdsExport($id),
+        'PDS_CS_Form_212.xlsx'
     );
+}
 
-    return $response;
+
+public function destroy($id)
+{
+    $personalInfo = PersonalInfo::findOrFail($id);
+
+    // OPTIONAL: delete related records if needed
+    // $personalInfo->familyBackground()->delete();
+    // $personalInfo->children()->delete();
+    // $personalInfo->educationalBackgrounds()->delete();
+
+    $personalInfo->delete();
+
+    return redirect()
+        ->route('personal-info.index')
+        ->with('success', 'Personal Data Sheet deleted successfully.');
 }
 
 

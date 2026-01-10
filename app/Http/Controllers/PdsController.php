@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PersonalInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\PdsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PdsController extends Controller
 {
