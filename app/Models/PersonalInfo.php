@@ -2,8 +2,18 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Child;
+use App\Models\FamilyBackground;
+use App\Models\EducationalBackground;
+use App\Models\Eligibility;
+use App\Models\WorkExperience;
+use App\Models\VoluntaryOrganization;
+use App\Models\Training;
+use App\Models\OtherInformation;
+
 
 class PersonalInfo extends Model
 {
@@ -54,8 +64,40 @@ class PersonalInfo extends Model
         return $this->hasOne(FamilyBackground::class);
     }
 
+    public function children()
+    {
+        return $this->hasMany(Child::class);
+    }
+
     public function educationalBackgrounds()
     {
         return $this->hasMany(EducationalBackground::class);
     }
+
+    public function eligibilities()
+{
+    return $this->hasMany(Eligibility::class);
+}
+
+public function workExperiences()
+{
+    return $this->hasMany(WorkExperience::class);
+}
+
+public function voluntaryOrganizations()
+{
+    return $this->hasMany(VoluntaryOrganization::class);
+}
+
+public function trainings()
+{
+    return $this->hasMany(Training::class);
+}
+
+public function otherInformation()
+{
+    return $this->hasOne(OtherInformation::class);
+}
+
+
 }

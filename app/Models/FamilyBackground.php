@@ -19,6 +19,7 @@ class FamilyBackground extends Model
         'spouse_employer',
         'spouse_business_address',
         'spouse_telephone',
+        'spouse_not_applicable',
         'father_surname',
         'father_first_name',
         'father_middle_name',
@@ -27,6 +28,7 @@ class FamilyBackground extends Model
         'mother_first_name',
         'mother_middle_name',
     ];
+    
 
     // Relationships
     public function personalInfo()

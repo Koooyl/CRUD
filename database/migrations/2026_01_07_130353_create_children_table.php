@@ -17,6 +17,8 @@ return new class extends Migration {
 
             $table->string('full_name');
             $table->date('date_of_birth')->nullable();
+            
+
 
             $table->timestamps();
         });

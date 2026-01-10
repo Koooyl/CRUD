@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->string('spouse_employer')->nullable();
             $table->string('spouse_business_address')->nullable();
             $table->string('spouse_telephone')->nullable();
+            $table->boolean('is_not_applicable')->default(false);
+
 
             // ================= FATHER =================
             $table->string('father_surname')->nullable();

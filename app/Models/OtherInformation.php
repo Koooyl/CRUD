@@ -5,23 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EducationalBackground extends Model
+class OtherInformation extends Model
 {
     use HasFactory;
 
+    // ✅ FIX TABLE NAME
+    protected $table = 'other_informations';
+
     protected $fillable = [
         'personal_info_id',
-        'level',
-        'school_name',
-        'degree_course',
-        'period_from',
-        'period_to',
-        'highest_level_units',
-        'year_graduated',
-        'honors_received',
-        'is_not_applicable',
-];
-
+        'special_skills',
+        'non_academic_distinctions',
+        'membership_in_associations',
+    ];
 
     public function personalInfo()
     {
