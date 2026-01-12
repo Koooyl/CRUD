@@ -87,11 +87,25 @@ public function storeWeb(Request $request)
 }
 
 
-public function index()
+public function index(Request $request)
 {
-    $personalInfos = PersonalInfo::latest()->get();
+    $query = PersonalInfo::query();
+
+    if ($request->filled('search')) {
+        $search = $request->search;
+
+        $query->where(function ($q) use ($search) {
+            $q->where('surname', 'like', "%{$search}%")
+              ->orWhere('first_name', 'like', "%{$search}%");
+        });
+    }
+
+    $personalInfos = $query->latest()->get();
+
     return view('personal_info.index', compact('personalInfos'));
 }
+
+
 
 
 

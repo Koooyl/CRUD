@@ -20,6 +20,37 @@
 
 @section('content')
 
+
+{{-- SEARCH BAR --}}
+<div class="mb-4">
+    <form method="GET" action="{{ route('personal-info.index') }}">
+        <div class="flex items-center gap-2">
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search by surname or first name..."
+                class="w-full md:w-1/3 px-4 py-2 border rounded-lg
+                       focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            >
+
+            <button type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg
+                       hover:bg-blue-700 transition">
+                Search
+            </button>
+
+            @if(request('search'))
+                <a href="{{ route('personal-info.index') }}"
+                   class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100">
+                    Clear
+                </a>
+            @endif
+        </div>
+    </form>
+</div>
+
+
 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
 
     <div class="overflow-x-auto">
