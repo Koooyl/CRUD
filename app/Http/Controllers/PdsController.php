@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\PersonalInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+/*
 use App\Exports\PdsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelExcel;
+*/
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PdsController extends Controller
 {
@@ -173,6 +179,230 @@ class PdsController extends Controller
 
     return view('pds.show', compact('personalInfo'));
 }
+
+public function export($id)
+{
+    $info = PersonalInfo::with('children')->findOrFail($id);
+    $info = PersonalInfo::with([
+        'children',
+        'familyBackground',
+        'educationalBackgrounds'
+    ])->findOrFail($id);
+
+
+    $templatePath = storage_path('app/templates/CSC_PDS.xlsx');
+
+    if (!file_exists($templatePath)) {
+        dd('TEMPLATE NOT FOUND', $templatePath);
+    }
+
+    // Load CSC template
+    $spreadsheet = IOFactory::load($templatePath);
+    $sheet = $spreadsheet->getSheetByName('C1');
+    
+
+        if (!$sheet) {
+            dd('C1 sheet not found');
+        }
+
+        
+
+
+
+    // ======================
+    // PERSONAL INFORMATION
+    // ======================
+
+    $sheet->setCellValue('D10', $info->surname);
+    $sheet->setCellValue('D11', $info->first_name);
+    $sheet->setCellValue('D12', $info->middle_name);
+    $sheet->setCellValue('D15', $info->place_of_birth);
+    $sheet->setCellValue('L11', $info->name_extension);
+    $sheet->setCellValue('D13', \Carbon\Carbon::parse($info->birth_date)->format('d/m/Y'));
+    $sheet->setCellValue('D16', $info->sex_at_birth);
+    $sheet->setCellValue('D17', $info->civil_status);
+    $sheet->setCellValue('D22', $info->height_m);
+    $sheet->setCellValue('D24', $info->weight_kg);
+    $sheet->setCellValue('D25', $info->blood_type);
+    $sheet->setCellValue('D27', $info->umid_no);
+    $sheet->setCellValue('D29', $info->pagibig_no);
+    $sheet->setCellValue('D31', $info->philhealth_no);
+    $sheet->setCellValue('D32', $info->philsys_no);
+    $sheet->setCellValue('D33', $info->tin_no);
+    $sheet->setCellValue('D34', $info->agency_employee_no);
+
+
+
+
+    $sheet->setCellValue('I17', $info->res_house_no);
+    $sheet->setCellValue('L17', $info->res_street);
+    $sheet->setCellValue('I19', $info->res_subdivision);
+    $sheet->setCellValue('L19', $info->res_barangay);
+    $sheet->setCellValue('I22', $info->res_city);
+    $sheet->setCellValue('L22', $info->res_province);
+
+    $sheet->setCellValue('I25', $info->perm_house_no);
+    $sheet->setCellValue('L25', $info->perm_street);
+    $sheet->setCellValue('I27', $info->perm_subdivision);
+    $sheet->setCellValue('L27', $info->perm_barangay);
+    $sheet->setCellValue('I29', $info->perm_city);
+    $sheet->setCellValue('L29', $info->perm_province);
+    
+    $sheet->setCellValue('J13', $info->citizenship);
+    $sheet->setCellValue('L31', $info->telephone_no);       
+    $sheet->setCellValue('L33', $info->mobile_no);
+    $sheet->setCellValue('L34', $info->email);
+
+
+
+
+    // ======================
+    // FAMILY BACKGROUND
+    // ======================
+    $fb = $info->familyBackground;
+
+    $sheet->setCellValue('D36', optional($fb)->spouse_surname);
+    $sheet->setCellValue('D37', optional($fb)->spouse_first_name);
+    $sheet->setCellValue('D38', optional($fb)->spouse_middle_name);
+    $sheet->setCellValue('G37', optional($fb)->spouse_name_extension);
+    $sheet->setCellValue('D39', optional($fb)->spouse_occupation);
+    $sheet->setCellValue('D40', optional($fb)->spouse_employer);
+    $sheet->setCellValue('D41', optional($fb)->spouse_business_address);
+    $sheet->setCellValue('D42', optional($fb)->spouse_telephone);
+
+    $sheet->setCellValue('D43', optional($fb)->father_surname);
+    $sheet->setCellValue('D44', optional($fb)->father_first_name);
+    $sheet->setCellValue('D45', optional($fb)->father_middle_name);
+    $sheet->setCellValue('G44', optional($fb)->father_name_extension);
+
+    $sheet->setCellValue('D47', optional($fb)->mother_maiden_surname);
+    $sheet->setCellValue('D48', optional($fb)->mother_first_name);
+    $sheet->setCellValue('D49', optional($fb)->mother_middle_name);
+
+
+    /*======================
+    CHILDREN (PER ROW)
+    ====================== */
+
+$startRow = 37;
+
+foreach ($info->children->take(7) as $i => $child) {
+    $row = $startRow + $i;
+
+    // merged I–L
+    $sheet->setCellValue("I{$row}", $child->full_name);
+
+    // merged M–N
+    $sheet->setCellValue(
+        "M{$row}",
+        \Carbon\Carbon::parse($child->date_of_birth)->format('m/d/Y')
+    );
+}
+
+
+
+    // ======================
+    // EDUCATIONAL BACKGROUND
+    // ======================
+
+    $elementary = $info->educationalBackgrounds
+    ->firstWhere('level', 'ELEMENTARY');
+
+$sheet->setCellValue('D54', optional($elementary)->school_name);
+$sheet->setCellValue('G54', optional($elementary)->degree_course);
+$sheet->setCellValue('J54', optional($elementary)->period_from);
+$sheet->setCellValue('K54', optional($elementary)->period_to);
+$sheet->setCellValue('L54', optional($elementary)->highest_level_units);
+$sheet->setCellValue('M54', optional($elementary)->year_graduated);
+$sheet->setCellValue('N54', optional($elementary)->honors_received);
+
+
+$secondary = $info->educationalBackgrounds
+    ->firstWhere('level', 'SECONDARY');
+
+$sheet->setCellValue('D55', optional($secondary)->school_name);
+$sheet->setCellValue('G55', optional($secondary)->degree_course);
+$sheet->setCellValue('J55', optional($secondary)->period_from);
+$sheet->setCellValue('K55', optional($secondary)->period_to);
+$sheet->setCellValue('L55', optional($secondary)->highest_level_units);
+$sheet->setCellValue('M55', optional($secondary)->year_graduated);
+$sheet->setCellValue('N55', optional($secondary)->honors_received);
+
+
+$vocation = $info->educationalBackgrounds
+    ->firstWhere('level', 'VOCATIONAL / TRADE COURSE');
+
+$sheet->setCellValue('D56', optional($vocation)->school_name);
+$sheet->setCellValue('G56', optional($vocation)->degree_course);
+$sheet->setCellValue('J56', optional($vocation)->period_from);
+$sheet->setCellValue('K56', optional($vocation)->period_to);
+$sheet->setCellValue('L56', optional($vocation)->highest_level_units);
+$sheet->setCellValue('M56', optional($vocation)->year_graduated);
+$sheet->setCellValue('N56', optional($vocation)->honors_received);
+
+
+
+$college = $info->educationalBackgrounds
+    ->firstWhere('level', 'COLLEGE');
+
+$sheet->setCellValue('D57', optional($college)->school_name);
+    $sheet->setCellValue('G57', optional($college)->degree_course);
+    $sheet->setCellValue('J57', optional($college)->period_from);
+    $sheet->setCellValue('K57', optional($college)->period_to);
+    $sheet->setCellValue('L57', optional($college)->highest_level_units);
+    $sheet->setCellValue('M57', optional($college)->year_graduated);
+    $sheet->setCellValue('N57', optional($college)->honors_received);
+
+
+
+$graduate = $info->educationalBackgrounds
+    ->firstWhere('level', 'GRADUATE STUDIES');
+
+    $sheet->setCellValue('D58', optional($graduate)->school_name);
+    $sheet->setCellValue('G58', optional($graduate)->degree_course);
+    $sheet->setCellValue('J58', optional($graduate)->period_from);
+    $sheet->setCellValue('K58', optional($graduate)->period_to);
+    $sheet->setCellValue('L58', optional($graduate)->highest_level_units);
+    $sheet->setCellValue('M58', optional($graduate)->year_graduated);
+    $sheet->setCellValue('N58', optional($graduate)->honors_received);
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ======================
+    // DOWNLOAD RESPONSE
+    // ======================
+
+    return new StreamedResponse(function () use ($spreadsheet) {
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+    }, 200, [
+        'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition' => 'attachment;filename="PDS.xlsx"',
+        'Cache-Control'       => 'max-age=0',
+    ]);
+}
+
 
 }
 

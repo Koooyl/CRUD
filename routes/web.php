@@ -56,8 +56,9 @@ Route::post('/personal-info', [PersonalInfoController::class, 'store'])->name('p
 
 
 
-Route::get('/pds/{id}/export', [PersonalInfoController::class, 'exportPds'])
+Route::get('/pds/{id}/export', [PdsController::class, 'export'])
     ->name('pds.export');
+
 
 Route::delete('/pds/{id}', [PersonalInfoController::class, 'destroy'])
     ->name('personal-info.destroy');
