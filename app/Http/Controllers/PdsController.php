@@ -5,12 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\PersonalInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-/*
-use App\Exports\PdsExport;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Excel as ExcelExcel;
-*/
-
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -205,9 +199,7 @@ public function export($id)
             dd('C1 sheet not found');
         }
 
-        
-
-
+    
 
     // ======================
     // PERSONAL INFORMATION
@@ -374,18 +366,79 @@ $graduate = $info->educationalBackgrounds
 
 
 
+    $sheet = $spreadsheet->getSheetByName('C2');    
+
+    if (!$sheet) {
+        dd('C2 sheet not found');
+    }
+
+    // ======================
+    // ELIGIBILITIES
+    // ======================
 
 
+    foreach ($info->eligibilities as $index => $eligibility) {
+        $row = 5 + $index;
+
+        $sheet->setCellValue("A{$row}", $eligibility->eligibility_type);
+        $sheet->setCellValue("F{$row}", $eligibility->rating);
+        $sheet->setCellValue("G{$row}", $eligibility->date_of_exam ? \Carbon\Carbon::parse($eligibility->date_of_exam)->format('d/m/Y') : '');
+        $sheet->setCellValue("I{$row}", $eligibility->place_of_exam);
+        $sheet->setCellValue("J{$row}", $eligibility->license_number);
+        $sheet->setCellValue("K{$row}", $eligibility->license_validity ? \Carbon\Carbon::parse($eligibility->license_validity)->format('d/m/Y') : '');
+    }
 
 
+    //=======================
+    // WORK EXPERIENCES
+    //=======================
+
+    foreach ($info->workExperiences as $index => $work) {
+        $row = 18 + $index;
+
+        $sheet->setCellValue("D{$row}", $work->position_title);
+        $sheet->setCellValue("G{$row}", $work->company_name);
+        $sheet->setCellValue("J{$row}", $work->appointment_status);
+        $sheet->setCellValue("K{$row}", $work->government_service ? : '');
+        $sheet->setCellValue("A{$row}", $work->date_from ? \Carbon\Carbon::parse($work->date_from)->format('d/m/Y') : '');
+        $sheet->setCellValue("C{$row}", $work->date_to ? \Carbon\Carbon::parse($work->date_to)->format('d/m/Y') : '');
+    }
 
 
+    //========================
+    // VOLUNTARY ORGANIZATIONS
+    //========================
 
+    $sheet = $spreadsheet->getSheetByName('C3');    
 
+   
+    if (!$sheet) {
+        dd('C3 sheet not found');
+    }
 
+    foreach ($info->voluntaryOrganizations as $index => $voluntary) {
+        $row = 6 + $index;
 
+        $sheet->setCellValue("A{$row}", $voluntary->organization_name);
+        $sheet->setCellValue("E{$row}", $voluntary->from_date ? \Carbon\Carbon::parse($voluntary->from_date)->format('d/m/Y') : '');
+        $sheet->setCellValue("F{$row}", $voluntary->to_date ? \Carbon\Carbon::parse($voluntary->to_date)->format('d/m/Y') : '');
+        $sheet->setCellValue("G{$row}", $voluntary->number_of_hours);
+        $sheet->setCellValue("H{$row}", $voluntary->position);
+    }
 
+    //========================
+    // TRAININGS
+    //========================
 
+    foreach ($info->trainings as $index => $training) {
+        $row = 18 + $index;
+
+        $sheet->setCellValue("A{$row}", $training->title);
+        $sheet->setCellValue("E{$row}", $training->from_date ? \Carbon\Carbon::parse($training->from_date)->format('d/m/Y') : '');
+        $sheet->setCellValue("F{$row}", $training->to_date ? \Carbon\Carbon::parse($training->to_date)->format('d/m/Y') : '');
+        $sheet->setCellValue("G{$row}", $training->number_of_hours);
+        $sheet->setCellValue("H{$row}", $training->conducted_by);
+    }
 
 
 
