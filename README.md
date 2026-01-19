@@ -64,3 +64,22 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+composer install
+
+composer update
+
+composer require maatwebsite/excel:^3.1.48 --with-all-dependencies
+
+(optional)
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+npm install
+
+(split powershell)
+npm run dev 
+php artisan serve
+
+

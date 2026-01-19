@@ -1,174 +1,133 @@
 @extends('layouts.app')
 
 @section('header')
-Create Personal Information
+<div class="flex flex-col gap-1">
+    <h1 class="text-2xl font-semibold text-gray-800">Create Personal Information</h1>
+    <p class="text-sm text-gray-500">Please fill out all required personal details</p>
+</div>
 @endsection
 
 @section('content')
-<form method="POST" action="/personal-info/store" class="space-y-6">
+<form method="POST" action="/personal-info/store" class="space-y-10">
     @csrf
 
-    {{-- NAME --}}
-    <div class="grid grid-cols-3 gap-4">
+    {{-- CARD WRAPPER --}}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-8">
+
+        {{-- NAME --}}
         <div>
-            <label>Surname</label>
-            <input type="text" name="surname" class="border p-2 w-full">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Personal Details</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <x-input label="Surname" name="surname" />
+                <x-input label="First Name" name="first_name" />
+                <x-input label="Middle Name" name="middle_name" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                <x-input label="Name Extension" name="name_extension" />
+                <x-input label="Date of Birth" name="date_of_birth" type="date" />
+                <x-input label="Place of Birth" name="place_of_birth" />
+            </div>
         </div>
 
+        {{-- BASIC INFO --}}
         <div>
-            <label>First Name</label>
-            <input type="text" name="first_name" class="border p-2 w-full">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Basic Information</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="form-label">Sex</label>
+                    <select name="sex_at_birth" class="form-select">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+
+                <x-input label="Civil Status" name="civil_status" />
+                <x-input label="Citizenship" name="citizenship" />
+            </div>
         </div>
 
+        {{-- PHYSICAL --}}
         <div>
-            <label>Middle Name</label>
-            <input type="text" name="middle_name" class="border p-2 w-full">
-        </div>
-    </div>
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Physical Attributes</h2>
 
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            <label>Name Extension</label>
-            <input type="text" name="name_extension" class="border p-2 w-full">
-        </div>
-
-        <div>
-            <label>Date of Birth</label>
-            <input type="date" name="date_of_birth" class="border p-2 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <x-input label="Height (m)" name="height_m" type="number" step="0.01" />
+                <x-input label="Weight (kg)" name="weight_kg" type="number" />
+                <x-input label="Blood Type" name="blood_type" />
+            </div>
         </div>
 
+        {{-- GOVERNMENT IDS --}}
         <div>
-            <label>Place of Birth</label>
-            <input type="text" name="place_of_birth" class="border p-2 w-full">
-        </div>
-    </div>
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Government IDs</h2>
 
-    {{-- BASIC INFO --}}
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            <label>Sex</label>
-            <select name="sex_at_birth" class="border p-2 w-full">
-                <option value="">-- Select --</option>
-                <option>Male</option>
-                <option>Female</option>
-            </select>
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <x-input label="UMID No" name="umid_no" />
+                <x-input label="PAG-IBIG No" name="pagibig_no" />
+                <x-input label="PhilHealth No" name="philhealth_no" />
+            </div>
 
-        <div>
-            <label>Civil Status</label>
-            <input type="text" name="civil_status" class="border p-2 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                <x-input label="PhilSys No" name="philsys_no" />
+                <x-input label="TIN No" name="tin_no" />
+                <x-input label="Agency Employee No" name="agency_employee_no" />
+            </div>
         </div>
 
+        {{-- CONTACT --}}
         <div>
-            <label>Citizenship</label>
-            <input type="text" name="citizenship" class="border p-2 w-full">
-        </div>
-    </div>
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Contact Information</h2>
 
-    {{-- PHYSICAL --}}
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            <label>Height (m)</label>
-            <input type="number" step="0.01" name="height_m" class="border p-2 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <x-input label="Telephone No" name="telephone_no" />
+                <x-input label="Mobile No" name="mobile_no" />
+                <x-input label="Email" name="email" type="email" />
+            </div>
         </div>
 
+        {{-- RESIDENTIAL ADDRESS --}}
         <div>
-            <label>Weight (kg)</label>
-            <input type="number" name="weight_kg" class="border p-2 w-full">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Residential Address</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <x-input placeholder="House No" name="res_house_no" />
+                <x-input placeholder="Street" name="res_street" />
+                <x-input placeholder="Subdivision" name="res_subdivision" />
+                <x-input placeholder="Barangay" name="res_barangay" />
+                <x-input placeholder="City" name="res_city" />
+                <x-input placeholder="Province" name="res_province" />
+                <x-input placeholder="Zip Code" name="res_zip_code" />
+            </div>
         </div>
 
+        {{-- PERMANENT ADDRESS --}}
         <div>
-            <label>Blood Type</label>
-            <input type="text" name="blood_type" class="border p-2 w-full">
-        </div>
-    </div>
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Permanent Address</h2>
 
-    {{-- GOVERNMENT IDS --}}
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            <label>UMID No</label>
-            <input type="text" name="umid_no" class="border p-2 w-full">
-        </div>
-
-        <div>
-            <label>PAG-IBIG No</label>
-            <input type="text" name="pagibig_no" class="border p-2 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <x-input placeholder="House No" name="perm_house_no" />
+                <x-input placeholder="Street" name="perm_street" />
+                <x-input placeholder="Subdivision" name="perm_subdivision" />
+                <x-input placeholder="Barangay" name="perm_barangay" />
+                <x-input placeholder="City" name="perm_city" />
+                <x-input placeholder="Province" name="perm_province" />
+                <x-input placeholder="Zip Code" name="perm_zip_code" />
+            </div>
         </div>
 
-        <div>
-            <label>PhilHealth No</label>
-            <input type="text" name="philhealth_no" class="border p-2 w-full">
+        {{-- SUBMIT --}}
+        <div class="flex justify-end pt-6 border-t">
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 transition text-white px-8 py-2.5 rounded-lg font-medium shadow-sm"
+            >
+                Next
+            </button>
         </div>
-    </div>
-
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            <label>PhilSys No</label>
-            <input type="text" name="philsys_no" class="border p-2 w-full">
-        </div>
-
-        <div>
-            <label>TIN No</label>
-            <input type="text" name="tin_no" class="border p-2 w-full">
-        </div>
-
-        <div>
-            <label>Agency Employee No</label>
-            <input type="text" name="agency_employee_no" class="border p-2 w-full">
-        </div>
-    </div>
-
-    {{-- CONTACT --}}
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            <label>Telephone No</label>
-            <input type="text" name="telephone_no" class="border p-2 w-full">
-        </div>
-
-        <div>
-            <label>Mobile No</label>
-            <input type="text" name="mobile_no" class="border p-2 w-full">
-        </div>
-
-        <div>
-            <label>Email</label>
-            <input type="email" name="email" class="border p-2 w-full">
-        </div>
-    </div>
-
-    {{-- RESIDENTIAL ADDRESS --}}
-    <h3 class="font-semibold">Residential Address</h3>
-    <div class="grid grid-cols-3 gap-4">
-        <input placeholder="House No" name="res_house_no" class="border p-2">
-        <input placeholder="Street" name="res_street" class="border p-2">
-        <input placeholder="Subdivision" name="res_subdivision" class="border p-2">
-        <input placeholder="Barangay" name="res_barangay" class="border p-2">
-        <input placeholder="City" name="res_city" class="border p-2">
-        <input placeholder="Province" name="res_province" class="border p-2">
-        <input placeholder="Zip Code" name="res_zip_code" class="border p-2">
-    </div>
-
-    {{-- PERMANENT ADDRESS --}}
-    <h3 class="font-semibold">Permanent Address</h3>
-    <div class="grid grid-cols-3 gap-4">
-        <input placeholder="House No" name="perm_house_no" class="border p-2">
-        <input placeholder="Street" name="perm_street" class="border p-2">
-        <input placeholder="Subdivision" name="perm_subdivision" class="border p-2">
-        <input placeholder="Barangay" name="perm_barangay" class="border p-2">
-        <input placeholder="City" name="perm_city" class="border p-2">
-        <input placeholder="Province" name="perm_province" class="border p-2">
-        <input placeholder="Zip Code" name="perm_zip_code" class="border p-2">
-    </div>
-
-    {{-- SUBMIT --}}
-    <div>
-        <button
-    type="submit"
-    class="bg-blue-600 text-white px-6 py-2 rounded"
->
-    Next
-</button>
-
     </div>
 </form>
 @endsection

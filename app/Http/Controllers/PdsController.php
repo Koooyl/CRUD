@@ -302,10 +302,10 @@ foreach ($info->children->take(7) as $i => $child) {
 
 $sheet->setCellValue('D54', optional($elementary)->school_name);
 $sheet->setCellValue('G54', optional($elementary)->degree_course);
-$sheet->setCellValue('J54', optional($elementary)->period_from);
-$sheet->setCellValue('K54', optional($elementary)->period_to);
+$sheet->setCellValue('J54', optional($elementary)->period_from ?? 'N/A');
+$sheet->setCellValue('K54', optional($elementary)->period_to ?? 'N/A');
 $sheet->setCellValue('L54', optional($elementary)->highest_level_units);
-$sheet->setCellValue('M54', optional($elementary)->year_graduated);
+$sheet->setCellValue('M54', optional($elementary)->year_graduated ?? 'N/A');
 $sheet->setCellValue('N54', optional($elementary)->honors_received);
 
 
@@ -314,10 +314,10 @@ $secondary = $info->educationalBackgrounds
 
 $sheet->setCellValue('D55', optional($secondary)->school_name);
 $sheet->setCellValue('G55', optional($secondary)->degree_course);
-$sheet->setCellValue('J55', optional($secondary)->period_from);
-$sheet->setCellValue('K55', optional($secondary)->period_to);
+$sheet->setCellValue('J55', optional($secondary)->period_from ?? 'N/A');
+$sheet->setCellValue('K55', optional($secondary)->period_to ?? 'N/A');
 $sheet->setCellValue('L55', optional($secondary)->highest_level_units);
-$sheet->setCellValue('M55', optional($secondary)->year_graduated);
+$sheet->setCellValue('M55', optional($secondary)->year_graduated ?? 'N/A');
 $sheet->setCellValue('N55', optional($secondary)->honors_received);
 
 
@@ -326,10 +326,10 @@ $vocation = $info->educationalBackgrounds
 
 $sheet->setCellValue('D56', optional($vocation)->school_name);
 $sheet->setCellValue('G56', optional($vocation)->degree_course);
-$sheet->setCellValue('J56', optional($vocation)->period_from);
-$sheet->setCellValue('K56', optional($vocation)->period_to);
+$sheet->setCellValue('J56', optional($vocation)->period_from ?? 'N/A');
+$sheet->setCellValue('K56', optional($vocation)->period_to ?? 'N/A');
 $sheet->setCellValue('L56', optional($vocation)->highest_level_units);
-$sheet->setCellValue('M56', optional($vocation)->year_graduated);
+$sheet->setCellValue('M56', optional($vocation)->year_graduated ?? 'N/A');
 $sheet->setCellValue('N56', optional($vocation)->honors_received);
 
 
@@ -339,10 +339,10 @@ $college = $info->educationalBackgrounds
 
 $sheet->setCellValue('D57', optional($college)->school_name);
     $sheet->setCellValue('G57', optional($college)->degree_course);
-    $sheet->setCellValue('J57', optional($college)->period_from);
-    $sheet->setCellValue('K57', optional($college)->period_to);
+    $sheet->setCellValue('J57', optional($college)->period_from ?? 'N/A');
+    $sheet->setCellValue('K57', optional($college)->period_to ?? 'N/A');
     $sheet->setCellValue('L57', optional($college)->highest_level_units);
-    $sheet->setCellValue('M57', optional($college)->year_graduated);
+    $sheet->setCellValue('M57', optional($college)->year_graduated ?? 'N/A');
     $sheet->setCellValue('N57', optional($college)->honors_received);
 
 
@@ -352,10 +352,10 @@ $graduate = $info->educationalBackgrounds
 
     $sheet->setCellValue('D58', optional($graduate)->school_name);
     $sheet->setCellValue('G58', optional($graduate)->degree_course);
-    $sheet->setCellValue('J58', optional($graduate)->period_from);
-    $sheet->setCellValue('K58', optional($graduate)->period_to);
+    $sheet->setCellValue('J58', optional($graduate)->period_from ?? 'N/A');
+    $sheet->setCellValue('K58', optional($graduate)->period_to ?? 'N/A');
     $sheet->setCellValue('L58', optional($graduate)->highest_level_units);
-    $sheet->setCellValue('M58', optional($graduate)->year_graduated);
+    $sheet->setCellValue('M58', optional($graduate)->year_graduated ?? 'N/A');
     $sheet->setCellValue('N58', optional($graduate)->honors_received);
 
 

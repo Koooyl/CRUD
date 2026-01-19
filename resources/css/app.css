@@ -3,5 +3,38 @@
 @tailwind utilities;
 
 
+@layer components {
+    .form-label {
+        @apply block text-sm font-medium text-gray-600 mb-1;
+    }
+
+    .form-input {
+        @apply w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
+    }
+
+    .form-select {
+        @apply w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
+    }
+}
 
 
+@layer components {
+    .table-th {
+        @apply border border-gray-300 px-3 py-2 text-left font-semibold;
+    }
+
+    .table-td {
+        @apply border border-gray-300 px-2 py-2 align-middle;
+    }
+
+    .table-input {
+        @apply w-full rounded-md border-gray-300 text-sm
+               focus:border-blue-500 focus:ring-blue-500;
+    }
+}
+
+
+.table-input:disabled {
+    font-style: italic;
+    color: #6b7280;
+}

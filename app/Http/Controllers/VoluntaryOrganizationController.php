@@ -17,7 +17,7 @@ class VoluntaryOrganizationController extends Controller
     {
         $request->validate([
             'personal_info_id' => 'required|exists:personal_infos,id',
-            'organizations.*.organization_name' => 'required|string|max:255',
+            'organizations.*.organization_name' => 'nullable|string|max:255',
             'organizations.*.position' => 'nullable|string|max:255',
             'organizations.*.from_date' => 'nullable|date',
             'organizations.*.to_date' => 'nullable|date',

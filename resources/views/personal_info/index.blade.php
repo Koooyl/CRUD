@@ -6,7 +6,14 @@
             Personal Data Sheet (PDS)
         </h1>
 
-        <a href="/personal-info/create"
+        
+    </div>
+@endsection
+
+@section('content')
+
+<div class="mb-6 flex justify-start">
+<a href="/personal-info/create"
            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor">
@@ -15,12 +22,7 @@
             </svg>
             Add New
         </a>
-    </div>
-@endsection
-
-@section('content')
-
-
+</div>
 {{-- SEARCH BAR --}}
 <div class="mb-4">
     <form method="GET" action="{{ route('personal-info.index') }}">
